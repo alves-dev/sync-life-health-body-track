@@ -1,4 +1,4 @@
-package sync.health.body_track
+package synclife.health.bodytrack
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
