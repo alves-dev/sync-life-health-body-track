@@ -23,6 +23,9 @@ jobs:
           java-version: '21'
           distribution: 'corretto'
       -
+        name: Set execute permission for Gradlew
+        run: chmod +x ./gradlew
+      -
         name: Build application
         run: ./gradlew build
       -
