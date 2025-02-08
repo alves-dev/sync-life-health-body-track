@@ -13,6 +13,12 @@ class SleepTracking (
     @Column(name = "action", nullable = false, updatable = false)
     var action: SleepAction,
 
+    @Column(name = "accounted")
+    var accounted: Boolean,
+
+    @Column(name = "minutes_slept")
+    var minutesSlept: Int,
+
     // BaseEntity
     personId: String,
     datetime: LocalDateTime
@@ -22,4 +28,12 @@ class SleepTracking (
         this.personId = personId
         this.datetime = datetime
     }
+
+    constructor(action: SleepAction, personId: String, datetime: LocalDateTime) : this(
+        action,
+        accounted = false,
+        minutesSlept = 0,
+        personId,
+        datetime
+    )
 }
