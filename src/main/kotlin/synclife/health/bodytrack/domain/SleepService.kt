@@ -59,7 +59,9 @@ class SleepService {
             }
 
             val result: OperationResult = SleepTracking.markAsComputed(sleep, wakeUp)
-            if (!result.status) {
+            if (result.status) {
+                fireDebugNotification("Sleep: $personId", "Dormiu: ${result.reason} minutos")
+            }else{
                 log.warn(result.reason)
                 fireNotification("Sleep: $personId", result.reason)
             }
@@ -68,6 +70,12 @@ class SleepService {
 
     private fun fireNotification(title: String, message: String) {
         val notification = Notification.createDefaultNotification(title, message)
+        val event = EventNotification(notification)
+        rabbitMqSender.sendNotification(event)
+    }
+
+    private fun fireDebugNotification(title: String, message: String) {
+        val notification = Notification.createDefaultDebug(title, message)
         val event = EventNotification(notification)
         rabbitMqSender.sendNotification(event)
     }

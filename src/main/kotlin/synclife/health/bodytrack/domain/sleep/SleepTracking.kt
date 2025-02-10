@@ -47,6 +47,9 @@ class SleepTracking (
 
     companion object {
         fun markAsComputed(sleep: SleepTracking, wakeUp: SleepTracking): OperationResult {
+            if (sleep.personId != wakeUp.personId)
+                return OperationResult.ofFailure("Registros de pessoas diferentes: ${sleep.personId} x ${wakeUp.personId}")
+
             val duration = Duration.between(sleep.datetime, wakeUp.datetime)
             val minutes = duration.toMinutes().toInt()
 
@@ -55,7 +58,7 @@ class SleepTracking (
             sleep.markAsComputed(minutes)
             wakeUp.markAsComputed(minutes)
 
-            return OperationResult.ofSuccess();
+            return OperationResult.ofSuccessWithMessage(minutes.toString());
         }
 
         private fun validMinutes(minutes : Int): Boolean{

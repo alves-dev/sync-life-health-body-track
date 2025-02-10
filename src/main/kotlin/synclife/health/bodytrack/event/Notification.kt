@@ -66,6 +66,25 @@ class Notification(
             )
         }
 
+        fun createDefaultDebug(
+            title: String,
+            message: String,
+            id: String = UUID.randomUUID().toString(),
+            level: Level = Level.MEDIUM,
+            minutesAddBefore: Long = 120
+        ): Notification {
+            return Notification(
+                recipientType = RecipientType.PERSON,
+                recipientId = "igor_alves",
+                level = level,
+                type = Type.DEBUG,
+                title = title,
+                message = message,
+                id = id,
+                showBefore = getDatetimeString(minutesAddBefore)
+            )
+        }
+
         private fun getDatetimeString(minutes: Long): String {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
             val dateTime = LocalDateTime.now().plusMinutes(minutes)
