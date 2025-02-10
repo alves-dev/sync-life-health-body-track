@@ -9,17 +9,23 @@ import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import synclife.health.bodytrack.domain.sleep.SleepTracking
 import synclife.health.bodytrack.event.EventBase
+import synclife.health.bodytrack.event.EventNotification
 import synclife.health.bodytrack.event.EventSleep
+import synclife.health.bodytrack.event.Notification
+import synclife.health.bodytrack.infrastructure.broker.RabbitMqSender
 import synclife.health.bodytrack.infrastructure.repository.SleepTrackingRepository
 import synclife.health.bodytrack.utils.OperationResult
 
 @Service
-class Service {
+class SleepService {
 
     private val log: Logger = LoggerFactory.getLogger(Service::class.java)
 
     @Autowired
     private lateinit var sleepRepository: SleepTrackingRepository
+
+    @Autowired
+    private lateinit var rabbitMqSender: RabbitMqSender
 
     @Async
     @EventListener
@@ -36,26 +42,33 @@ class Service {
 
     @Transactional
     fun processSleepSummary() {
-        val listNames: List<String> = sleepRepository.findDistinctPersonId()
+        val personIdList: List<String> = sleepRepository.findDistinctPersonId()
 
-        for (name in listNames) {
-            val wakeUp :SleepTracking? = sleepRepository.findLastWakeUpByPersonId(name)
+        for (personId in personIdList) {
+            val wakeUp: SleepTracking? = sleepRepository.findLastWakeUpByPersonId(personId)
             if (wakeUp == null) continue
 
-            val sleep :SleepTracking? = sleepRepository.findLastSleepByPersonIdAndDatetime(name, wakeUp.datetime)
+            val sleep: SleepTracking? = sleepRepository.findLastSleepByPersonIdAndDatetime(personId, wakeUp.datetime)
             if (sleep == null) continue
 
-            if (sleep.computed){
-                println("sleep já computado")
-                //TODO: lança uma notification
+            if (sleep.computed) {
+                val message = "${sleep.id}: Sleep já computado"
+                log.warn(message)
+                fireNotification("Sleep: $personId", message)
                 continue
             }
 
-            val result : OperationResult = SleepTracking.markAsComputed(sleep, wakeUp)
-            if (!result.status){
-                println(result.reason)
-                //TODO: lança uma notification
+            val result: OperationResult = SleepTracking.markAsComputed(sleep, wakeUp)
+            if (!result.status) {
+                log.warn(result.reason)
+                fireNotification("Sleep: $personId", result.reason)
             }
         }
+    }
+
+    private fun fireNotification(title: String, message: String) {
+        val notification = Notification.createDefaultNotification(title, message)
+        val event = EventNotification(notification)
+        rabbitMqSender.sendNotification(event)
     }
 }

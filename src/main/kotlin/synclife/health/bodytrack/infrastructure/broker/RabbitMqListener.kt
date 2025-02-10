@@ -1,4 +1,4 @@
-package synclife.health.bodytrack.infrastructure.listener
+package synclife.health.bodytrack.infrastructure.broker
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.json.JsonMapper

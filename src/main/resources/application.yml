@@ -26,3 +26,5 @@ sync-life:
   health:
     body-track:
       queue: body-track
+  rabbitmq:
+    exchange: ${SYNC-LIFE_RABBITMQ_EXCHANGE}

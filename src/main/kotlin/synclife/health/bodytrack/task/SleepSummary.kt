@@ -1,18 +1,24 @@
 package synclife.health.bodytrack.task
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import synclife.health.bodytrack.domain.Service
+import synclife.health.bodytrack.domain.SleepService
 
 @Component
 class SleepSummary {
 
-    @Autowired
-    private lateinit var sleepTrackingService: Service
+    private val log: Logger = LoggerFactory.getLogger(SleepSummary::class.java)
 
-    @Scheduled(cron = "* * */1 * * *")
+    @Autowired
+    private lateinit var sleepTrackingService: SleepService
+
+    @Scheduled(cron = "@hourly")
     fun task() {
-        sleepTrackingService.processSleepSummary();
+        log.info("SleepSummary: start")
+        sleepTrackingService.processSleepSummary()
+        log.info("SleepSummary: end")
     }
 }

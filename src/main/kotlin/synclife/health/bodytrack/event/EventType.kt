@@ -7,7 +7,11 @@ enum class EventType(private val eventText: String, val eventBase: KClass<out Ev
     HEALTH_BODY_TRACK_SLEEP_V1(
         "HEALTH.BODY_TRACK.SLEEP.V1",
         EventSleep::class
-    ); // https://github.com/alves-dev/SyncLife/blob/main/events.md#event-healthbody_tracksleepv1
+    ), // https://github.com/alves-dev/SyncLife/blob/main/events.md#event-healthbody_tracksleepv1
+    NOTIFICATION_V1(
+        "NOTIFICATION.V1",
+        EventNotification::class
+    ); // https://github.com/alves-dev/SyncLife/blob/main/events.md#event-notificationv1
 
     companion object {
         fun getEventClass(eventText: String): KClass<out EventBase> {
