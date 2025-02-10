@@ -25,13 +25,14 @@ class RabbitMqListener {
         .build()
 
     @RabbitListener(queues = ["\${sync-life.health.body-track.queue}"])
-    fun handleEvent(message: String?) {
+    fun handleEvent(message: String) {
         try {
             val node = jsonMapper.readTree(message)
             val eventTypeValue: String = node.get("type").asText()
 
             val eventClass: KClass<out EventBase> = EventType.getEventClass(eventTypeValue)
-            val event: EventBase = jsonMapper.readValue(message, eventClass.java)
+            val messageReplaced = message.replace(eventTypeValue, eventTypeValue.replace(".", "_"))
+            val event: EventBase = jsonMapper.readValue(messageReplaced, eventClass.java)
 
             eventPublisher.publishEvent(event)
         } catch (e: Exception) {
