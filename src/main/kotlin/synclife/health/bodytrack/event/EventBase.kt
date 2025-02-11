@@ -2,13 +2,17 @@ package synclife.health.bodytrack.event
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 
 /**
  * @see <a href="https://github.com/alves-dev/SyncLife/blob/main/events.md#todos-os-eventos-v%C3%A3o-ter-os-seguintes-campos">event-base</a>
  */
-open class EventBase(val type: EventType) {
+open class EventBase(@JsonIgnore val type: EventType) {
+
+    @JsonProperty("type")
+    val eventText : String = type.eventText
 
     @JsonAlias("person_id")
     @JsonProperty("person_id")

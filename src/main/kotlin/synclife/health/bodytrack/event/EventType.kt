@@ -3,7 +3,7 @@ package synclife.health.bodytrack.event
 import java.util.*
 import kotlin.reflect.KClass
 
-enum class EventType(private val eventText: String, val eventBase: KClass<out EventBase>) {
+enum class EventType(val eventText: String, val eventBase: KClass<out EventBase>) {
     HEALTH_BODY_TRACK_SLEEP_V1(
         "HEALTH.BODY_TRACK.SLEEP.V1",
         EventSleep::class
