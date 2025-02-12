@@ -15,6 +15,8 @@ import synclife.health.bodytrack.event.Notification
 import synclife.health.bodytrack.infrastructure.broker.RabbitMqSender
 import synclife.health.bodytrack.infrastructure.repository.SleepTrackingRepository
 import synclife.health.bodytrack.utils.OperationResult
+import java.time.Duration
+import java.time.format.DateTimeFormatter
 
 @Service
 class SleepService {
@@ -60,7 +62,12 @@ class SleepService {
 
             val result: OperationResult = SleepTracking.markAsComputed(sleep, wakeUp)
             if (result.status) {
-                fireDebugNotification("Sleep: $personId", "Dormiu: ${result.reason} minutos")
+                val date = wakeUp.datetime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
+
+                val duration = Duration.ofMinutes(result.reason.toLong())
+                val hours = duration.toHours()
+                val minutes = duration.toMinutesPart()
+                fireDebugNotification("Sleep: $personId", "Dormiu: ${result.reason} minutos em $date, o que da $hours horas e $minutes minutos")
             }else{
                 log.warn(result.reason)
                 fireNotification("Sleep: $personId", result.reason)
