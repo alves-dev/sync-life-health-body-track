@@ -50,7 +50,7 @@ class Notification(
         fun createDefaultNotification(
             title: String,
             message: String,
-            id: String = UUID.randomUUID().toString(),
+            id: String,
             level: Level = Level.MEDIUM,
             minutesAddBefore: Long = 120
         ): Notification {

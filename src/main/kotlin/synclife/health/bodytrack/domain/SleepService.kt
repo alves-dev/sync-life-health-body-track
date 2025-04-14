@@ -76,7 +76,8 @@ class SleepService {
     }
 
     private fun fireNotification(title: String, message: String) {
-        val notification = Notification.createDefaultNotification(title, message)
+        val id = title.plus(message).replace(" ", "-").lowercase()
+        val notification = Notification.createDefaultNotification(title, message, id)
         val event = EventNotification(notification)
         rabbitMqSender.sendNotification(event)
     }
