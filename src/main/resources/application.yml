@@ -12,7 +12,7 @@ spring:
   datasource:
     username: ${SYNC-LIFE_DATABASE_USERNAME}
     password: ${SYNC-LIFE_DATABASE_PASSWORD}
-    url: jdbc:mysql://${SYNC-LIFE_DATABASE_HOSTNAME}:${SYNC-LIFE_DATABASE_PORT}/body-track?createDatabaseIfNotExist=true&serverTimezone=America/Sao_Paulo
+    url: jdbc:mysql://${SYNC-LIFE_DATABASE_HOSTNAME}:${SYNC-LIFE_DATABASE_PORT}/${SYNC-LIFE_DATABASE_NAME}?createDatabaseIfNotExist=true&serverTimezone=America/Sao_Paulo
 
   rabbitmq:
     host: ${SYNC-LIFE_RABBITMQ_HOSTNAME}
