@@ -5,39 +5,7 @@ on:
     branches: main
 
 jobs:
-  publish-docker-image:
-    env:
-      IMAGE_NAME: ghcr.io/alves-dev/synclife-health-body-track
-      IMAGE_TAG: $(date +%Y%m%d)  # Cria uma tag com a data de execução
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      -
-        uses: actions/checkout@v4
-      -
-        name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '21'
-          distribution: 'corretto'
-      -
-        name: Set execute permission for Gradlew
-        run: chmod +x ./gradlew
-      -
-        name: Build application
-        run: ./gradlew build -x test
-      -
-        name: Login in ghcr
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      -
-        name: Build and Push Docker image
-        run: |
-          docker buildx create --use --name mybuilder
-          docker buildx build . --platform linux/amd64,linux/arm64 --tag ${{ env.IMAGE_NAME }}:latest --push
-          docker buildx build . --platform linux/amd64,linux/arm64 --tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} --push
+  build:
+    uses: alves-dev/actions/.github/workflows/build-docker.yml@v1
+    with:
+      image-name: ghcr.io/alves-dev/synclife-health-body-track
