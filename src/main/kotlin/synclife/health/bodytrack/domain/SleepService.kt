@@ -53,10 +53,13 @@ class SleepService {
             val sleep: SleepTracking? = sleepRepository.findLastSleepByPersonIdAndDatetime(personId, wakeUp.datetime)
             if (sleep == null) continue
 
+            val notificationId: String = "$personId-${sleep.id}"
+            val notificationTitle: String = "Sleep: $personId"
+
             if (sleep.computed) {
                 val message = "${sleep.id}: Sleep já computado"
                 log.warn(message)
-                fireNotification("Sleep: $personId", message)
+                fireNotification(notificationTitle, message, notificationId)
                 continue
             }
 
@@ -67,16 +70,18 @@ class SleepService {
                 val duration = Duration.ofMinutes(result.reason.toLong())
                 val hours = duration.toHours()
                 val minutes = duration.toMinutesPart()
-                fireDebugNotification("Sleep: $personId", "Dormiu: ${result.reason} minutos em $date, o que da $hours horas e $minutes minutos")
-            }else{
+                fireDebugNotification(
+                    notificationTitle,
+                    "Dormiu: ${result.reason} minutos em $date, o que da $hours horas e $minutes minutos"
+                )
+            } else {
                 log.warn(result.reason)
-                fireNotification("Sleep: $personId", result.reason)
+                fireNotification(notificationTitle, result.reason, notificationId)
             }
         }
     }
 
-    private fun fireNotification(title: String, message: String) {
-        val id = title.plus(message).replace(" ", "-").lowercase()
+    private fun fireNotification(title: String, message: String, id: String) {
         val notification = Notification.createDefaultNotification(title, message, id)
         val event = EventNotification(notification)
         rabbitMqSender.sendNotification(event)
