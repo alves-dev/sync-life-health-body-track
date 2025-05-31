@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import synclife.health.bodytrack.event.EventBase
-import synclife.health.bodytrack.event.EventNotification
+import synclife.health.bodytrack.event.v2.EventBaseV2
+import synclife.health.bodytrack.event.v2.EventNotification
 
 
 @Service
@@ -33,7 +33,7 @@ class RabbitMqSender(
         sendMessage(notification, notificationRoutingKey)
     }
 
-    private fun sendMessage(event: EventBase, routingKey: String) {
+    private fun sendMessage(event: EventBaseV2, routingKey: String) {
         try {
             val message = objectMapper.writeValueAsString(event)
             rabbitTemplate.convertAndSend(exchange, routingKey, message)

@@ -1,7 +1,7 @@
 package synclife.health.bodytrack.domain
 
 import jakarta.persistence.*
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 @MappedSuperclass
 abstract class BaseEntity() {
@@ -15,5 +15,5 @@ abstract class BaseEntity() {
     lateinit var personId: String
 
     @Column(name = "datetime", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-    lateinit var datetime: LocalDateTime
+    lateinit var datetime: ZonedDateTime
 }

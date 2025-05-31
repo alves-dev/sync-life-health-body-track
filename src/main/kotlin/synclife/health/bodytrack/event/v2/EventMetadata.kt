@@ -1,4 +1,4 @@
-package synclife.health.bodytrack.event
+package synclife.health.bodytrack.event.v2
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonFormat

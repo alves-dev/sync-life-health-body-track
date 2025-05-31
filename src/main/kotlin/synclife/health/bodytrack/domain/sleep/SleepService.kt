@@ -1,4 +1,4 @@
-package synclife.health.bodytrack.domain
+package synclife.health.bodytrack.domain.sleep
 
 import jakarta.transaction.Transactional
 import org.slf4j.Logger
@@ -7,11 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
-import synclife.health.bodytrack.domain.sleep.SleepTracking
-import synclife.health.bodytrack.event.EventBase
-import synclife.health.bodytrack.event.EventNotification
-import synclife.health.bodytrack.event.EventSleep
-import synclife.health.bodytrack.event.Notification
+import synclife.health.bodytrack.event.v2.EventNotification
+import synclife.health.bodytrack.event.v2.EventSleep
+import synclife.health.bodytrack.event.v2.Notification
 import synclife.health.bodytrack.infrastructure.broker.RabbitMqSender
 import synclife.health.bodytrack.infrastructure.repository.SleepTrackingRepository
 import synclife.health.bodytrack.utils.OperationResult
@@ -34,12 +32,6 @@ class SleepService {
     fun processEventSleep(event: EventSleep) {
         val e = SleepTracking(event.action, event.personId, event.datetime)
         sleepRepository.save(e)
-    }
-
-    @Async
-    @EventListener
-    fun processEventBase(event: EventBase) {
-        log.info(event.toString())
     }
 
     @Transactional
@@ -82,13 +74,13 @@ class SleepService {
     }
 
     private fun fireNotification(title: String, message: String, id: String) {
-        val notification = Notification.createDefaultNotification(title, message, id)
+        val notification = Notification.Companion.createDefaultNotification(title, message, id)
         val event = EventNotification(notification)
         rabbitMqSender.sendNotification(event)
     }
 
     private fun fireDebugNotification(title: String, message: String) {
-        val notification = Notification.createDefaultDebug(title, message)
+        val notification = Notification.Companion.createDefaultDebug(title, message)
         val event = EventNotification(notification)
         rabbitMqSender.sendNotification(event)
     }

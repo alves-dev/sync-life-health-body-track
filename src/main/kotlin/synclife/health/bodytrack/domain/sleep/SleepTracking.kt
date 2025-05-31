@@ -2,14 +2,14 @@ package synclife.health.bodytrack.domain.sleep
 
 import jakarta.persistence.*
 import synclife.health.bodytrack.domain.BaseEntity
-import synclife.health.bodytrack.domain.SleepAction
 import synclife.health.bodytrack.utils.OperationResult
 import java.time.Duration
 import java.time.LocalDateTime
+import java.time.ZoneId
 
 @Entity
 @Table(name = "sleep_tracking")
-class SleepTracking (
+class SleepTracking(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "action", nullable = false, updatable = false)
@@ -25,10 +25,10 @@ class SleepTracking (
     personId: String,
     datetime: LocalDateTime
 
-) : BaseEntity(){
+) : BaseEntity() {
     init {
         this.personId = personId
-        this.datetime = datetime
+        this.datetime = datetime.atZone(ZoneId.of("America/Sao_Paulo"))
     }
 
     constructor(action: SleepAction, personId: String, datetime: LocalDateTime) : this(
@@ -61,7 +61,7 @@ class SleepTracking (
             return OperationResult.ofSuccessWithMessage(minutes.toString());
         }
 
-        private fun validMinutes(minutes : Int): Boolean{
+        private fun validMinutes(minutes: Int): Boolean {
             val minMinutes = 60
             val maxMinutes = 60 * 10
             return minutes in minMinutes..maxMinutes

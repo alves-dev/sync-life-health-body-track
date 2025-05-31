@@ -1,4 +1,4 @@
-package synclife.health.bodytrack.event
+package synclife.health.bodytrack.event.v2
 
 import java.time.LocalDateTime
 
@@ -7,7 +7,7 @@ import java.time.LocalDateTime
  */
 class EventNotification(
     var notification: Notification
-) : EventBase(EventType.NOTIFICATION_V1) {
+) : EventBaseV2(EventTypeV2.NOTIFICATION_V1) {
     init {
         this.personId = notification.recipientId
         this.datetime = LocalDateTime.now()
@@ -17,4 +17,5 @@ class EventNotification(
     override fun toString(): String {
         return "EventNotification(notification=$notification)"
     }
+
 }

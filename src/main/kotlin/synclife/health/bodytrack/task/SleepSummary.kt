@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import synclife.health.bodytrack.domain.SleepService
+import synclife.health.bodytrack.domain.sleep.SleepService
 
 @Component
 class SleepSummary {

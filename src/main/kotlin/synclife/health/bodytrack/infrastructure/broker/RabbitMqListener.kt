@@ -8,8 +8,10 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
-import synclife.health.bodytrack.event.EventBase
-import synclife.health.bodytrack.event.EventType
+import synclife.health.bodytrack.event.v2.EventBaseV2
+import synclife.health.bodytrack.event.v2.EventTypeV2
+import synclife.health.bodytrack.event.v3.EventBaseV3
+import synclife.health.bodytrack.event.v3.EventTypeV3
 import kotlin.reflect.KClass
 
 @Service
@@ -30,9 +32,25 @@ class RabbitMqListener {
             val node = jsonMapper.readTree(message)
             val eventTypeValue: String = node.get("type").asText()
 
-            val eventClass: KClass<out EventBase> = EventType.getEventClass(eventTypeValue)
+            val eventClass: KClass<out EventBaseV2> = EventTypeV2.getEventClass(eventTypeValue)
             val messageReplaced = message.replace(eventTypeValue, eventTypeValue.replace(".", "_"))
-            val event: EventBase = jsonMapper.readValue(messageReplaced, eventClass.java)
+            val event: EventBaseV2 = jsonMapper.readValue(messageReplaced, eventClass.java)
+
+            eventPublisher.publishEvent(event)
+        } catch (e: Exception) {
+            log.warn("[RabbitMqListener] Error parsing: $message")
+            log.warn(e.toString())
+        }
+    }
+
+    @RabbitListener(queues = ["\${sync-life.health.body-track.queue-v3}"])
+    fun handleEventV3(message: String) {
+        try {
+            val node = jsonMapper.readTree(message)
+            val eventTypeValue: String = node.get("type").asText()
+
+            val eventClass: KClass<out EventBaseV3> = EventTypeV3.getEventClass(eventTypeValue)
+            val event: EventBaseV3 = jsonMapper.readValue(message, eventClass.java)
 
             eventPublisher.publishEvent(event)
         } catch (e: Exception) {

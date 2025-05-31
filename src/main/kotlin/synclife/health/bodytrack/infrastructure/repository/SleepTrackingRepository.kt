@@ -3,7 +3,7 @@ package synclife.health.bodytrack.infrastructure.repository
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import synclife.health.bodytrack.domain.sleep.SleepTracking
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 interface SleepTrackingRepository : JpaRepository<SleepTracking, Long> {
 
@@ -33,5 +33,5 @@ interface SleepTrackingRepository : JpaRepository<SleepTracking, Long> {
         ORDER BY `datetime` DESC
         LIMIT 1
     """)
-    fun findLastSleepByPersonIdAndDatetime(personId: String, dateTime: LocalDateTime): SleepTracking?
+    fun findLastSleepByPersonIdAndDatetime(personId: String, dateTime: ZonedDateTime): SleepTracking?
 }
