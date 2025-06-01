@@ -6,12 +6,17 @@ import java.util.*
 import kotlin.reflect.KClass
 
 enum class EventTypeV3(val eventText: String, val flow: EventFlow, val eventBase: KClass<out EventBaseV3>) : EventType {
+    ORCHESTRATOR_SUBSCRIPTIONS_REQUESTED_V1(
+        "orchestrator.subscriptions.requested.v1",
+        EventFlow.PRODUCED,
+        EventOrchestratorSubscriptionRequestedV1::class
+    ), // https://github.com/alves-dev/sync-life/blob/main/events/model/orchestrator/subscriptions.requested.v1.json
     HEALTH_BODY_MEASUREMENT_V1(
         "health.body.measurement.v1",
         EventFlow.CONSUMED,
         EventHealthBodyMeasurementV1::class
     ); // https://github.com/alves-dev/sync-life/blob/main/events/model/health/body.measurement.v1.json
-    
+
     override fun getEventFlow(): EventFlow = flow
 
     companion object {

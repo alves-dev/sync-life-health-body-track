@@ -10,7 +10,7 @@ import synclife.health.bodytrack.event.EventSync
 @Service
 class LogEvents {
 
-    private val log: Logger = LoggerFactory.getLogger(Service::class.java)
+    private val log: Logger = LoggerFactory.getLogger(LogEvents::class.java)
 
     @Async
     @EventListener

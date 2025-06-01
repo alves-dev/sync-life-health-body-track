@@ -26,6 +26,7 @@ sync-life:
   health:
     body-track:
       queue: body-track
-      queue-v3: body-track.v3
+      queue.v3: body-track.v3
   rabbitmq:
-    exchange: ${SYNC-LIFE_RABBITMQ_EXCHANGE}
+    exchange: events.v2
+    exchange.v3: events.v3

@@ -6,6 +6,7 @@ import synclife.health.bodytrack.event.EventFlow
 import synclife.health.bodytrack.event.EventSync
 import java.net.URI
 import java.net.URL
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -14,7 +15,7 @@ import java.util.*
  */
 open class EventBaseV3(@JsonIgnore val type: EventTypeV3) : EventSync {
 
-    val URI: String = "/services/body-track"
+    private val URI: String = "/services/body-track"
 
     @JsonProperty("specversion")
     private var specVersion: String? = null
@@ -35,7 +36,27 @@ open class EventBaseV3(@JsonIgnore val type: EventTypeV3) : EventSync {
     private var datasChema: URL? = null
 
     @JsonProperty("extensions")
-    private var extensions: MutableMap<String?, Any?>? = null
+    private var extensions: MutableMap<String, Any>? = null
+
+    fun setValuesBase(datasChema: URL, extensions: MutableMap<String, Any>?) {
+        this.specVersion = "1.0"
+        this.source = URI(URI)
+        this.id = UUID.randomUUID()
+        this.time = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"))
+        this.dataContentType = "application/json"
+        this.datasChema = datasChema
+        this.extensions = extensions
+    }
+
+    @JsonProperty("type")
+    fun getEventText(): String {
+        return type.eventText
+    }
+
+    @JsonIgnore
+    override fun getEventFlow(): EventFlow {
+        return type.getEventFlow()
+    }
 
     override fun toString(): String {
         return "EventBaseV3{" +
@@ -48,9 +69,5 @@ open class EventBaseV3(@JsonIgnore val type: EventTypeV3) : EventSync {
                 ", datasChema=" + datasChema +
                 ", extensions=" + extensions +
                 '}'
-    }
-
-    override fun getEventFlow(): EventFlow {
-        return type.getEventFlow()
     }
 }

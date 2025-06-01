@@ -76,12 +76,12 @@ class SleepService {
     private fun fireNotification(title: String, message: String, id: String) {
         val notification = Notification.Companion.createDefaultNotification(title, message, id)
         val event = EventNotification(notification)
-        rabbitMqSender.sendNotification(event)
+        rabbitMqSender.publishEventV2Notification(event)
     }
 
     private fun fireDebugNotification(title: String, message: String) {
         val notification = Notification.Companion.createDefaultDebug(title, message)
         val event = EventNotification(notification)
-        rabbitMqSender.sendNotification(event)
+        rabbitMqSender.publishEventV2Notification(event)
     }
 }

@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.amqp.rabbit.annotation.RabbitListener
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.context.annotation.DependsOn
 import org.springframework.stereotype.Service
 import synclife.health.bodytrack.event.v2.EventBaseV2
 import synclife.health.bodytrack.event.v2.EventTypeV2
@@ -15,12 +15,12 @@ import synclife.health.bodytrack.event.v3.EventTypeV3
 import kotlin.reflect.KClass
 
 @Service
-class RabbitMqListener {
+@DependsOn("logEvents")
+class RabbitMqListener(
+    private val eventPublisher: ApplicationEventPublisher
+) {
 
     private val log: Logger = LoggerFactory.getLogger(RabbitMqListener::class.java)
-
-    @Autowired
-    private lateinit var eventPublisher: ApplicationEventPublisher
 
     private val jsonMapper: JsonMapper = JsonMapper.builder().findAndAddModules()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -38,12 +38,12 @@ class RabbitMqListener {
 
             eventPublisher.publishEvent(event)
         } catch (e: Exception) {
-            log.warn("[RabbitMqListener] Error parsing: $message")
+            log.warn("[RabbitMqListener] V2 Error parsing: $message")
             log.warn(e.toString())
         }
     }
 
-    @RabbitListener(queues = ["\${sync-life.health.body-track.queue-v3}"])
+    @RabbitListener(queues = ["\${sync-life.health.body-track.queue.v3}"])
     fun handleEventV3(message: String) {
         try {
             val node = jsonMapper.readTree(message)
@@ -54,7 +54,7 @@ class RabbitMqListener {
 
             eventPublisher.publishEvent(event)
         } catch (e: Exception) {
-            log.warn("[RabbitMqListener] Error parsing: $message")
+            log.warn("[RabbitMqListener] V3 Error parsing: $message")
             log.warn(e.toString())
         }
     }
