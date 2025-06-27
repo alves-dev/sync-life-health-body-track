@@ -1,5 +1,5 @@
 <!--
-template_name=head
+template_name=head-code
 template_version=v1
 -->
 
@@ -10,16 +10,15 @@ template_version=v1
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/status-Em desenvolvimento-blue.svg" alt="status">
-</p>
-
-<p align="center">
 <img src="https://img.shields.io/badge/topics:-grey"> 
-<img src="https://img.shields.io/badge/kotlin-lightgrey">
-<img src="https://img.shields.io/badge/mysql-lightgrey">
-<img src="https://img.shields.io/badge/spring-lightgrey">
-<img src="https://img.shields.io/badge/rabbitmq-lightgrey">
 <img src="https://img.shields.io/badge/sync%20life-lightgrey">
+<img src="https://img.shields.io/badge/kotlin-lightgrey">
+<img src="https://img.shields.io/badge/spring-lightgrey">
+<img src="https://img.shields.io/badge/mysql-lightgrey">
+<img src="https://img.shields.io/badge/amqp-lightgrey">
+<img src="https://img.shields.io/badge/docker-lightgrey">
+<img src="https://img.shields.io/badge/rabbitmq-lightgrey">
+<img src="https://img.shields.io/badge/gradle-lightgrey">
 </p>
 
 <hr>
@@ -40,7 +39,7 @@ template_version=v1
 ### Modelagem
 - **V1**: [link](https://dbdiagram.io/d/BodyTrack-v1-61e8998bbb7a646986012deb)
 <!--
-template_name=footer
+template_name=footer-default
 template_version=v1
 -->
 
@@ -49,4 +48,4 @@ template_version=v1
    <img src="https://img.shields.io/badge/licença-GPL%203-blue.svg" alt="license">
 </p>
 
-**Atualizado em:** 2025-06-14 15:09
+**Atualizado em:** 2025-06-27 08:27
