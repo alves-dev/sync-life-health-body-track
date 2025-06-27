@@ -10,6 +10,10 @@ template_version=v1
 </p>
 
 <p align="center">
+  <img src="https://img.shields.io/badge/status-development-blue.svg" alt="status">
+</p>
+
+<p align="center">
 <img src="https://img.shields.io/badge/topics:-grey"> 
 <img src="https://img.shields.io/badge/sync%20life-lightgrey">
 <img src="https://img.shields.io/badge/kotlin-lightgrey">
@@ -48,4 +52,4 @@ template_version=v1
    <img src="https://img.shields.io/badge/licença-GPL%203-blue.svg" alt="license">
 </p>
 
-**Atualizado em:** 2025-06-27 08:27
+**Atualizado em:** 2025-06-27 08:42
